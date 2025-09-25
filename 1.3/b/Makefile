@@ -3,7 +3,8 @@ SRCS = thread.c
 
 CC=gcc
 RM=rm
-CFLAGS= -g -Wall
+CFLAGS= -g -Wall -Wpedantic -Wpointer-arith -Wendif-labels -Wmissing-format-attribute \
+        -Wimplicit-fallthrough=3 -Wcast-function-type -Wshadow=compatible-local -Wformat-security
 LIBS=-lpthread
 INCLUDE_DIR="."
 
