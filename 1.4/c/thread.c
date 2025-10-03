@@ -9,11 +9,11 @@
 
 void cleanup_handler(void *arg)
 {
-	char **str_ptr = (char **)arg;
-	if (*str_ptr != NULL)
+	char *str_ptr = (char *)arg;
+	if (str_ptr != NULL)
 	{
-		free(*str_ptr);
-		*str_ptr = NULL;
+		free(str_ptr);
+		str_ptr = NULL;
 	}
 }
 
@@ -21,7 +21,7 @@ void *mythread(void *arg)
 {
 	char *string = malloc(strlen("hello world") + 1);
 	strcpy(string, "hello world");
-	pthread_cleanup_push(cleanup_handler, &string);
+	pthread_cleanup_push(cleanup_handler, string);
 	while (1)
 	{
 		pthread_cancel(pthread_self());

@@ -11,8 +11,9 @@ void *mythread(void *arg)
 {
 	int *counter = (int *)arg;
 	while (1)
-	{
+	{	
 		(*counter)++;
+		pthread_testcancel();
 	}
 	return NULL;
 }
@@ -29,6 +30,7 @@ int main()
 		return -1;
 	}
 	err = pthread_cancel(tid);
+	sleep(3);
 	if (err)
     {
         printf("main: pthread_cancel() failed: %s\n", strerror(err));
