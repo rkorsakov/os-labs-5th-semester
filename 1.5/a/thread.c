@@ -62,9 +62,6 @@ int main()
 {
     pthread_t tid1, tid2, tid3;
     int err;
-    sigset_t block_set;
-    sigaddset(&block_set, SIGQUIT);
-    pthread_sigmask(SIG_BLOCK, &block_set, NULL);
 
     printf("main [%d %d %d]: Hello from main!\n", getpid(), getppid(), gettid());
 
