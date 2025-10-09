@@ -52,7 +52,6 @@ void *thread3(void *arg)
         if (result == 0 && sig == SIGQUIT)
         {
             printf("Received SIGQUIT signal\n");
-            sigquit_received = 1;
         }
     }
     return NULL;
@@ -86,13 +85,17 @@ int main()
         return -1;
     }
 
-    sleep(2);
-    printf("Sending SIGINT...\n");
-    pthread_kill(tid2, SIGINT);
-    
-    sleep(2);
-    printf("Sending SIGQUIT...\n");
-    pthread_kill(tid3, SIGQUIT);
+    while (1) {
+        printf("Sending SIGINT to thread2...\n");
+        pthread_kill(tid2, SIGINT);
+        
+        sleep(2);
+
+        printf("Sending SIGQUIT to thread3...\n");
+        pthread_kill(tid3, SIGQUIT);
+        
+        sleep(2);
+    }
 
     pthread_join(tid1, NULL);
     pthread_join(tid2, NULL);
