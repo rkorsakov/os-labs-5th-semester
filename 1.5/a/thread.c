@@ -8,7 +8,6 @@
 #include <unistd.h>
 
 int sigint_received = 0;
-int sigquit_received = 0;
 
 void sigint_handler(int sig)
 {
