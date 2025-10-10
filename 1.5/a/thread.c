@@ -44,6 +44,7 @@ void *thread3(void *arg)
     sigset_t wait_set;
     sigemptyset(&wait_set);
     sigaddset(&wait_set, SIGQUIT);
+    pthread_sigmask(SIG_BLOCK, &wait_set, NULL);
     int sig;
     while (1)
     {
