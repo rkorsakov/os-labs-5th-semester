@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include <errno.h>
 
-static int thread_function(void *arg) {
+static int thread_function_wrapper(void *arg) {
     mythread_t thread = (mythread_t)arg;
     thread->retval = thread->start_routine(thread->arg);
     thread->finished = 1;
@@ -41,7 +41,7 @@ int mythread_create(mythread_t thread, void *(start_routine), void *arg) {
     }
     void *stack_top = stack + total_size;
     int flags = CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID;
-    pid_t tid = clone(thread_function, stack_top, flags, thread);
+    pid_t tid = clone(thread_function_wrapper, stack_top, flags, thread);
     if (tid == -1){
         fprintf(stderr, "error: clone failed - %s\n", strerror(errno));
         munmap(stack, total_size);
