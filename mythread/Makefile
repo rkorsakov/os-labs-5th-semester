@@ -9,6 +9,9 @@ OBJ = src/mythread.o
 
 all: $(LIB) $(TEST)
 
+$(OBJ): $(SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(LIB): $(OBJ)
 	$(CC) $(LDFLAGS) -o $@ $^
 
