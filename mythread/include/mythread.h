@@ -6,7 +6,7 @@
 #define MYTHREAD_SUCCESS 0
 #define MYTHREAD_ERROR -1
 #define STACK_SIZE (1024 * 1024)
-#define GUARD_PAGE_SIZE (4096)
+#define GUARD_PAGE_SIZE (4 * 1024)
 
 typedef struct {
     pid_t tid;
