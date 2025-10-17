@@ -33,6 +33,7 @@ int mythread_create(mythread_t thread, void *(start_routine), void *arg) {
     thread->stack = stack;
     thread->joined = 0;
     thread->finished = 0;
+    thread->detached = 0;
     int res = mprotect(stack + GUARD_PAGE_SIZE, STACK_SIZE, PROT_READ | PROT_WRITE);
     if (res == -1){
         fprintf(stderr, "error: mprotect failed - %s\n", strerror(errno));
@@ -76,6 +77,27 @@ int mythread_join(mythread_t thread, void **retval) {
     }
     
     thread->joined = 1;
+    
+    return MYTHREAD_SUCCESS;
+}
+
+int mythread_detach(mythread_t thread) {
+    if (!thread) {
+        fprintf(stderr, "error: thread is NULL\n");
+        return MYTHREAD_ERROR;
+    }
+    
+    if (thread->detached) {
+        fprintf(stderr, "error: thread already detached\n");
+        return MYTHREAD_ERROR;
+    }
+    
+    if (thread->joined) {
+        fprintf(stderr, "error: cannot detach an already joined thread\n");
+        return MYTHREAD_ERROR;
+    }
+
+    thread->detached = 1;
     
     return MYTHREAD_SUCCESS;
 }

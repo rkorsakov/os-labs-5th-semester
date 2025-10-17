@@ -16,11 +16,13 @@ typedef struct {
     void *stack;
     int finished;
     int joined;
+    int detached;
 } mythread;
 
 typedef mythread *mythread_t;
 
 int mythread_create(mythread_t thread, void *(start_routine), void *arg);
 int mythread_join(mythread_t thread, void **retval);
+int mythread_detach(mythread_t thread);
 
 #endif

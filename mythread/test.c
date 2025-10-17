@@ -25,6 +25,19 @@ void *thread3(void* arg)
     return NULL;
 }
 
+void *thread4(void* arg)
+{
+    int *id = (int*)arg;
+    printf("Thread %d working\n", *id);
+    return NULL;
+}
+
+void *thread5(void* arg)
+{
+    printf("hi");
+    return NULL;
+}
+
 int main()
 {
     printf("=== MyThread Test ===\n\n");
@@ -78,5 +91,33 @@ int main()
         return 1;
     }
     
+    printf("4. 100 threads test:\n");
+    mythread threads[100];
+    int thread_args[100];
+    for (int i = 0; i < 100; i++) {
+        thread_args[i] = i;
+        result = mythread_create(&threads[i], thread4, &thread_args[i]);
+        if (result == MYTHREAD_ERROR) {
+            fprintf(stderr, "Error creating thread %d\n", i);
+            return 1;
+        }
+    }
+    for (int i = 0; i < 100; i++) {
+        if (mythread_join(&threads[i], NULL) == MYTHREAD_ERROR) {
+            fprintf(stderr, "Error joining thread %d\n", i);
+            return 1;
+        }
+    }
+    printf("5. Detach test:\n");
+    mythread t4;
+    while (1)
+	{
+		result = mythread_create(&t4, thread5, NULL);
+		if (result == MYTHREAD_ERROR) {
+            fprintf(stderr, "Error creating thread\n");
+            return 1;
+        }
+        mythread_detach(&t4);
+	}
     return 0;
 }
