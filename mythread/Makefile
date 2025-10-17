@@ -13,7 +13,7 @@ $(OBJ): $(SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIB): $(OBJ)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $<
 
 $(TEST): test.c $(LIB)
 	$(CC) $(CFLAGS) -o $@ test.c -L. -lmythread -Wl,-rpath,.
