@@ -21,8 +21,7 @@ static int thread_function_wrapper(void *arg) {
 }
 
 int mythread_create(mythread_t thread, void *(start_routine), void *arg) {
-    int total_size = STACK_SIZE + GUARD_PAGE_SIZE;
-    void *stack = mmap(NULL, total_size, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0);
+    void *stack = mmap(NULL, STACK_SIZE + GUARD_PAGE_SIZE, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0);
     if (stack == MAP_FAILED) {
         fprintf(stderr, "error: mmap failed - %s\n", strerror(errno));
         return MYTHREAD_ERROR;
@@ -37,15 +36,15 @@ int mythread_create(mythread_t thread, void *(start_routine), void *arg) {
     int res = mprotect(stack + GUARD_PAGE_SIZE, STACK_SIZE, PROT_READ | PROT_WRITE);
     if (res == -1){
         fprintf(stderr, "error: mprotect failed - %s\n", strerror(errno));
-        munmap(stack, total_size);
+        munmap(stack, STACK_SIZE + GUARD_PAGE_SIZE);
         return MYTHREAD_ERROR;
     }
-    void *stack_top = stack + total_size;
+    void *stack_top = stack + STACK_SIZE + GUARD_PAGE_SIZE;
     int flags = CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID;
     pid_t tid = clone(thread_function_wrapper, stack_top, flags, thread);
     if (tid == -1){
         fprintf(stderr, "error: clone failed - %s\n", strerror(errno));
-        munmap(stack, total_size);
+        munmap(stack, STACK_SIZE + GUARD_PAGE_SIZE);
         return MYTHREAD_ERROR;
     }
     thread->tid = tid;
