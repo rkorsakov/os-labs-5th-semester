@@ -34,7 +34,7 @@ void *thread4(void* arg)
 
 void *thread5(void* arg)
 {
-    printf("hi");
+    printf("hi\n");
     return NULL;
 }
 
@@ -109,15 +109,20 @@ int main()
         }
     }
     printf("5. Detach test:\n");
-    mythread t4;
-    while (1)
-	{
-		result = mythread_create(&t4, thread5, NULL);
-		if (result == MYTHREAD_ERROR) {
-            fprintf(stderr, "Error creating thread\n");
-            return 1;
-        }
-        mythread_detach(&t4);
-	}
+    mythread t4, t5;
+	result = mythread_create(&t4, thread5, NULL);
+	if (result == MYTHREAD_ERROR) {
+        fprintf(stderr, "Error creating thread\n");
+        return 1;
+    }
+    mythread_detach(&t4);
+    sleep(3);
+    result = mythread_create(&t5, thread5, NULL);
+    if (result == MYTHREAD_ERROR) {
+        fprintf(stderr, "Error creating thread\n");
+        return 1;
+    }
+    mythread_detach(&t5);
+    sleep(3);
     return 0;
 }
