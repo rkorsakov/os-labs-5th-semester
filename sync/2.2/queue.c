@@ -140,8 +140,10 @@ int queue_get(queue_t *q, int *val) {
 }
 
 void queue_print_stats(queue_t *q) {
+    pthread_spin_lock(&q->lock);
     printf("queue stats: current size %d; attempts: (%ld %ld %ld); counts (%ld %ld %ld)\n",
         q->count,
         q->add_attempts, q->get_attempts, q->add_attempts - q->get_attempts,
         q->add_count, q->get_count, q->add_count - q->get_count);
+    pthread_spin_unlock(&q->lock);
 }
