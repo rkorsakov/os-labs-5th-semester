@@ -37,7 +37,7 @@ void *reader(void *arg) {
 	queue_t *q = (queue_t *)arg;
 	printf("reader [%d %d %d]\n", getpid(), getppid(), gettid());
 
-	set_cpu(1);
+	set_cpu(0);
 
 	while (1) {
 		int val = -1;
@@ -78,7 +78,7 @@ int main() {
 
 	printf("main [%d %d %d]\n", getpid(), getppid(), gettid());
 
-	q = queue_init(1000000);
+	q = queue_init(100);
 
 	err = pthread_create(&tid, NULL, reader, q);
 	if (err) {
