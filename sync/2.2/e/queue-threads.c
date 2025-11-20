@@ -86,7 +86,6 @@ int main() {
 		return -1;
 	}
 
-	sched_yield();
 
 	err = pthread_create(&tid, NULL, writer, q);
 	if (err) {
